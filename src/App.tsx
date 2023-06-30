@@ -3,6 +3,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import PlusIcon from "./components/icons/PlusIcon";
 import MinusIcon from "./components/icons/MinusIcon";
+import Button from "./components/Button";
+import { twMerge } from "tailwind-merge";
 
 const MINUTE = 60;
 
@@ -94,76 +96,73 @@ export default function App() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-slate-900 text-teal-100">
       <h1 className="sr-only">timer</h1>
-      <div className="flex flex-col sm:flex-row items-center gap-12">
-        <div className="flex flex-row sm:flex-col items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-8">
+        <div className="flex flex-row sm:flex-col items-stretch gap-4 min-w-[125px]">
           {status === Status.STOPPED && (
-            <button
-              className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
+            <Button
+              variant="filled"
+              title="Start the timer"
               onClick={handleStart}
             >
               start
-            </button>
+            </Button>
           )}
           {status === Status.STARTED && (
-            <button
-              className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
+            <Button
+              title="Freezes the timer and can be resumed"
               onClick={handlePause}
             >
               pause
-            </button>
+            </Button>
           )}
           {status === Status.PAUSED && (
-            <button
-              className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
-              onClick={handleResume}
-            >
+            <Button title="Resume timer" onClick={handleResume}>
               resume
-            </button>
+            </Button>
           )}
           {(status === Status.STARTED || status === Status.PAUSED) && (
-            <button
-              className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
+            <Button
+              title="Stops the timer and resets it to the original value"
               onClick={handleStop}
             >
               stop
-            </button>
+            </Button>
           )}
           {status === Status.FINISHED && (
-            <button
-              className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
+            <Button
+              title="Resets it to the original value"
               onClick={handleStop}
+              variant="filled"
             >
               reset
-            </button>
+            </Button>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="relative flex flex-col gap-2">
           <p
-            className={`text-7xl sm:text-9xl font-bold ${
+            className={`text-7xl sm:text-9xl font-bold font-mono ${
               status === Status.FINISHED ? "fade-five-times" : ""
             }`}
           >
             {String(minutes).padStart(2, "0")}:
             {String(seconds).padStart(2, "0")}
           </p>
-          <div className="flex flex-row gap-2 justify-between">
+          <div
+            className={twMerge(
+              "absolute left-0 bottom-0 translate-y-full w-full flex flex-row gap-2 justify-between"
+            )}
+          >
             <span className="text-lg">Minutes</span>
             <span className="text-lg">Seconds</span>
           </div>
         </div>
-        <div className="flex flex-row sm:flex-col items-center gap-4">
-          <button
-            className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
-            onClick={increaseTimeToWait}
-          >
+        <div className="flex flex-row sm:flex-col items-stretch gap-4 min-w-[125px]">
+          <Button title="Plus 1 minute" onClick={increaseTimeToWait}>
             <PlusIcon />
-          </button>
-          <button
-            className="px-8 py-2 rounded-lg text-lg bg-violet-800 hover:bg-purple-600 transition-colors"
-            onClick={decreseTimeToWait}
-          >
+          </Button>
+          <Button title="Minus 1 minute" onClick={decreseTimeToWait}>
             <MinusIcon />
-          </button>
+          </Button>
         </div>
       </div>
     </main>
